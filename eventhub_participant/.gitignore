@@ -1,0 +1,10 @@
+build/
+.idea/
+.vscode/
+*.iml
+.dart_tool/
+.packages
+.pub/
+ios/Pods/
+*.keystore
+eventhub_participant.zip

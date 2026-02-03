@@ -1,0 +1,2 @@
+Add App Transport Security exception for local dev if needed.
+Ensure iOS deployment target >= 13.0 (Podfile platform).
