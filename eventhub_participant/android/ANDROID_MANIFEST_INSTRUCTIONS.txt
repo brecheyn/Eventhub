@@ -1,3 +1,0 @@
-Update android/app/src/main/AndroidManifest.xml:
-  - Ensure <uses-permission android:name="android.permission.INTERNET" />
-  - Ensure minSdkVersion >= 21 in android/app/build.gradle
