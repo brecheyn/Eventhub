@@ -110,14 +110,14 @@ Assurez-vous que le backend tourne sur le port 5000.
 - Responsive design first
 - Optimisé pour la performance
 
-## 🎯 Pages Créées
+##  Pages Créées
 
 Landing Page (/)  
  Login (/auth/login)  
  Register (/auth/register)  
  Dashboard (/dashboard)
 
-## 🚀 Prochaines Étapes
+##  Prochaines Étapes
 
 À ajouter selon vos besoins:
 
@@ -128,11 +128,11 @@ Landing Page (/)
 - Page check-in
 - Page certificats
 
-## 💡 Support
+##  Support
 
 Pour toute question, consultez la documentation Next.js:  
 https://nextjs.org/docs
 
 ---
 
-**Créé avec ❤️ et Next.js 14**
+**Créé avec tailwind et Next.js 14**
