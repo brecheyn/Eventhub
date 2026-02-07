@@ -1,13 +1,26 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import Navbar from '@/components/layout/Navbar';
-import Loading from '@/components/ui/Loading';
-import { authAPI } from '@/lib/api/auth';
-import { User, Mail, Phone, Building, Shield, Save, LogOut, Eye, EyeOff, Lock, Trash2, AlertTriangle } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import Navbar from "@/components/layout/Navbar";
+import Loading from "@/components/ui/Loading";
+import { authAPI } from "@/lib/api/auth";
+import {
+  User,
+  Mail,
+  Phone,
+  Building,
+  Shield,
+  Save,
+  LogOut,
+  Eye,
+  EyeOff,
+  Lock,
+  Trash2,
+  AlertTriangle,
+} from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function ProfilePage() {
   const { user, isAuthenticated, loading: authLoading, logout } = useAuth();
@@ -15,18 +28,18 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  
+
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    organization: '',
+    name: "",
+    email: "",
+    phone: "",
+    organization: "",
   });
 
   const [passwordData, setPasswordData] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: '',
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   });
 
   const [showPasswords, setShowPasswords] = useState({
@@ -37,17 +50,17 @@ export default function ProfilePage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push('/auth/login');
+      router.push("/auth/login");
     }
   }, [isAuthenticated, authLoading, router]);
 
   useEffect(() => {
     if (user) {
       setFormData({
-        name: user.name || '',
-        email: user.email || '',
-        phone: user.phone || '',
-        organization: user.organization || '',
+        name: user.name || "",
+        email: user.email || "",
+        phone: user.phone || "",
+        organization: user.organization || "",
       });
     }
   }, [user]);
@@ -58,12 +71,14 @@ export default function ProfilePage() {
 
     try {
       await authAPI.updateProfile(formData);
-      toast.success('Profil mis à jour avec succès ! ✅');
-      
+      toast.success("Profil mis à jour avec succès ! ");
+
       // Recharger les données utilisateur
       window.location.reload();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Erreur lors de la mise à jour');
+      toast.error(
+        error.response?.data?.message || "Erreur lors de la mise à jour",
+      );
     } finally {
       setLoading(false);
     }
@@ -73,12 +88,12 @@ export default function ProfilePage() {
     e.preventDefault();
 
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error('Les mots de passe ne correspondent pas');
+      toast.error("Les mots de passe ne correspondent pas");
       return;
     }
 
     if (passwordData.newPassword.length < 6) {
-      toast.error('Le mot de passe doit contenir au moins 6 caractères');
+      toast.error("Le mot de passe doit contenir au moins 6 caractères");
       return;
     }
 
@@ -90,15 +105,18 @@ export default function ProfilePage() {
         newPassword: passwordData.newPassword,
       });
 
-      toast.success('Mot de passe modifié avec succès ! 🔒');
+      toast.success("Mot de passe modifié avec succès ! ");
       setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: '',
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
       });
       setShowPasswordForm(false);
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Erreur lors du changement de mot de passe');
+      toast.error(
+        error.response?.data?.message ||
+          "Erreur lors du changement de mot de passe",
+      );
     } finally {
       setLoading(false);
     }
@@ -110,10 +128,12 @@ export default function ProfilePage() {
       return;
     }
 
-    const confirmation = prompt('⚠️ ATTENTION ! Cette action est IRRÉVERSIBLE.\n\nTapez "SUPPRIMER" pour confirmer la suppression définitive de votre compte :');
-    
-    if (confirmation !== 'SUPPRIMER') {
-      toast.error('Suppression annulée');
+    const confirmation = prompt(
+      ' ATTENTION ! Cette action est IRRÉVERSIBLE.\n\nTapez "SUPPRIMER" pour confirmer la suppression définitive de votre compte :',
+    );
+
+    if (confirmation !== "SUPPRIMER") {
+      toast.error("Suppression annulée");
       setShowDeleteConfirm(false);
       return;
     }
@@ -122,11 +142,13 @@ export default function ProfilePage() {
 
     try {
       await authAPI.deleteAccount();
-      toast.success('Compte supprimé. Au revoir 👋');
+      toast.success("Compte supprimé. Au revoir ");
       logout();
-      router.push('/');
+      router.push("/");
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Erreur lors de la suppression');
+      toast.error(
+        error.response?.data?.message || "Erreur lors de la suppression",
+      );
     } finally {
       setLoading(false);
       setShowDeleteConfirm(false);
@@ -134,10 +156,10 @@ export default function ProfilePage() {
   };
 
   const handleLogout = () => {
-    if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+    if (confirm("Êtes-vous sûr de vouloir vous déconnecter ?")) {
       logout();
-      toast.success('Déconnexion réussie');
-      router.push('/auth/login');
+      toast.success("Déconnexion réussie");
+      router.push("/auth/login");
     }
   };
 
@@ -146,9 +168,9 @@ export default function ProfilePage() {
 
   const getRoleBadge = (role: string) => {
     const badges: any = {
-      admin: { class: 'badge-danger', label: 'Administrateur' },
-      organizer: { class: 'badge-info', label: 'Organisateur' },
-      participant: { class: 'badge-success', label: 'Participant' },
+      admin: { class: "badge-danger", label: "Administrateur" },
+      organizer: { class: "badge-info", label: "Organisateur" },
+      participant: { class: "badge-success", label: "Participant" },
     };
     return badges[role] || badges.participant;
   };
@@ -158,7 +180,7 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-secondary-50/50">
       <Navbar />
-      
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -182,10 +204,10 @@ export default function ProfilePage() {
               <h2 className="text-xl font-bold text-secondary-900 mb-2">
                 {user.name}
               </h2>
-              <p className="text-sm text-secondary-600 mb-3">
-                {user.email}
-              </p>
-              <span className={`badge ${roleBadge.class} inline-flex items-center`}>
+              <p className="text-sm text-secondary-600 mb-3">{user.email}</p>
+              <span
+                className={`badge ${roleBadge.class} inline-flex items-center`}
+              >
                 <Shield className="h-3 w-3 mr-1" />
                 {roleBadge.label}
               </span>
@@ -200,17 +222,17 @@ export default function ProfilePage() {
                 <div>
                   <div className="text-secondary-500">Membre depuis</div>
                   <div className="font-medium text-secondary-900">
-                    {new Date(user.createdAt).toLocaleDateString('fr-FR', {
-                      day: 'numeric',
-                      month: 'long',
-                      year: 'numeric'
+                    {new Date(user.createdAt).toLocaleDateString("fr-FR", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
                     })}
                   </div>
                 </div>
                 <div>
                   <div className="text-secondary-500">Statut</div>
                   <div className="font-medium text-green-600">
-                    {user.isActive ? '✓ Actif' : '✗ Inactif'}
+                    {user.isActive ? "✓ Actif" : "✗ Inactif"}
                   </div>
                 </div>
               </div>
@@ -241,7 +263,9 @@ export default function ProfilePage() {
                 <div className="flex items-start mb-4">
                   <AlertTriangle className="h-5 w-5 text-red-600 mr-2 mt-0.5" />
                   <div>
-                    <h4 className="font-bold text-red-900 mb-1">⚠️ Action irréversible</h4>
+                    <h4 className="font-bold text-red-900 mb-1">
+                      Action irréversible
+                    </h4>
                     <p className="text-sm text-red-800 mb-3">
                       La suppression de votre compte entraînera :
                     </p>
@@ -258,7 +282,7 @@ export default function ProfilePage() {
                   disabled={loading}
                   className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
                 >
-                  {loading ? 'Suppression...' : 'Confirmer la suppression'}
+                  {loading ? "Suppression..." : "Confirmer la suppression"}
                 </button>
                 <button
                   onClick={() => setShowDeleteConfirm(false)}
@@ -290,7 +314,9 @@ export default function ProfilePage() {
                       type="text"
                       required
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       className="input-field pl-10"
                       placeholder={user.name}
                     />
@@ -307,7 +333,9 @@ export default function ProfilePage() {
                       type="email"
                       required
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
                       className="input-field pl-10"
                       placeholder={user.email}
                     />
@@ -323,9 +351,11 @@ export default function ProfilePage() {
                     <input
                       type="tel"
                       value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
                       className="input-field pl-10"
-                      placeholder={user.phone || '+33 6 12 34 56 78'}
+                      placeholder={user.phone || "+33 6 12 34 56 78"}
                     />
                   </div>
                 </div>
@@ -339,9 +369,16 @@ export default function ProfilePage() {
                     <input
                       type="text"
                       value={formData.organization}
-                      onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          organization: e.target.value,
+                        })
+                      }
                       className="input-field pl-10"
-                      placeholder={user.organization || 'Nom de votre entreprise'}
+                      placeholder={
+                        user.organization || "Nom de votre entreprise"
+                      }
                     />
                   </div>
                 </div>
@@ -394,19 +431,33 @@ export default function ProfilePage() {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
                       <input
-                        type={showPasswords.current ? 'text' : 'password'}
+                        type={showPasswords.current ? "text" : "password"}
                         required
                         value={passwordData.currentPassword}
-                        onChange={(e) => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
+                        onChange={(e) =>
+                          setPasswordData({
+                            ...passwordData,
+                            currentPassword: e.target.value,
+                          })
+                        }
                         className="input-field pl-10 pr-10"
                         placeholder="••••••••"
                       />
                       <button
                         type="button"
-                        onClick={() => setShowPasswords({ ...showPasswords, current: !showPasswords.current })}
+                        onClick={() =>
+                          setShowPasswords({
+                            ...showPasswords,
+                            current: !showPasswords.current,
+                          })
+                        }
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary-400 hover:text-secondary-600"
                       >
-                        {showPasswords.current ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        {showPasswords.current ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -418,19 +469,33 @@ export default function ProfilePage() {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
                       <input
-                        type={showPasswords.new ? 'text' : 'password'}
+                        type={showPasswords.new ? "text" : "password"}
                         required
                         value={passwordData.newPassword}
-                        onChange={(e) => setPasswordData({ ...passwordData, newPassword: e.target.value })}
+                        onChange={(e) =>
+                          setPasswordData({
+                            ...passwordData,
+                            newPassword: e.target.value,
+                          })
+                        }
                         className="input-field pl-10 pr-10"
                         placeholder="••••••••"
                       />
                       <button
                         type="button"
-                        onClick={() => setShowPasswords({ ...showPasswords, new: !showPasswords.new })}
+                        onClick={() =>
+                          setShowPasswords({
+                            ...showPasswords,
+                            new: !showPasswords.new,
+                          })
+                        }
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary-400 hover:text-secondary-600"
                       >
-                        {showPasswords.new ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        {showPasswords.new ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
                       </button>
                     </div>
                     <p className="mt-1 text-xs text-secondary-500">
@@ -445,19 +510,33 @@ export default function ProfilePage() {
                     <div className="relative">
                       <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-secondary-400" />
                       <input
-                        type={showPasswords.confirm ? 'text' : 'password'}
+                        type={showPasswords.confirm ? "text" : "password"}
                         required
                         value={passwordData.confirmPassword}
-                        onChange={(e) => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
+                        onChange={(e) =>
+                          setPasswordData({
+                            ...passwordData,
+                            confirmPassword: e.target.value,
+                          })
+                        }
                         className="input-field pl-10 pr-10"
                         placeholder="••••••••"
                       />
                       <button
                         type="button"
-                        onClick={() => setShowPasswords({ ...showPasswords, confirm: !showPasswords.confirm })}
+                        onClick={() =>
+                          setShowPasswords({
+                            ...showPasswords,
+                            confirm: !showPasswords.confirm,
+                          })
+                        }
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary-400 hover:text-secondary-600"
                       >
-                        {showPasswords.confirm ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                        {showPasswords.confirm ? (
+                          <EyeOff className="h-5 w-5" />
+                        ) : (
+                          <Eye className="h-5 w-5" />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -468,9 +547,9 @@ export default function ProfilePage() {
                       onClick={() => {
                         setShowPasswordForm(false);
                         setPasswordData({
-                          currentPassword: '',
-                          newPassword: '',
-                          confirmPassword: '',
+                          currentPassword: "",
+                          newPassword: "",
+                          confirmPassword: "",
                         });
                       }}
                       className="btn-secondary"

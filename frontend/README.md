@@ -18,13 +18,13 @@ http://localhost:3000
 
 ## ✨ Fonctionnalités
 
-- ✅ Landing page professionnelle et moderne
-- ✅ Authentification complète (Login/Register)
-- ✅ Dashboard avec statistiques en temps réel
-- ✅ Design responsive (Mobile + Desktop)
-- ✅ Thème Orange & Blanc épuré
-- ✅ Animations fluides
-- ✅ Intégration API complète
+- Landing page professionnelle et moderne
+- Authentification complète (Login/Register)
+- Dashboard avec statistiques en temps réel
+- Design responsive (Mobile + Desktop)
+- Thème Orange & Blanc épuré
+- Animations fluides
+- Intégration API complète
 
 ## 📁 Structure
 
@@ -72,10 +72,12 @@ colors: {
 ## 🔐 Comptes de Test
 
 **Admin:**
+
 - Email: `admin@example.com`
 - Password: `admin123`
 
 **Participant:**
+
 - Email: `participant@example.com`
 - Password: `participant123`
 
@@ -110,14 +112,15 @@ Assurez-vous que le backend tourne sur le port 5000.
 
 ## 🎯 Pages Créées
 
-✅ Landing Page (/)  
-✅ Login (/auth/login)  
-✅ Register (/auth/register)  
-✅ Dashboard (/dashboard)  
+Landing Page (/)  
+ Login (/auth/login)  
+ Register (/auth/register)  
+ Dashboard (/dashboard)
 
 ## 🚀 Prochaines Étapes
 
 À ajouter selon vos besoins:
+
 - Page liste événements
 - Page création événement
 - Page détails événement

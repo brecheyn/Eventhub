@@ -1,16 +1,24 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import Navbar from '@/components/layout/Navbar';
-import Loading from '@/components/ui/Loading';
-import { certificatesAPI } from '@/lib/api/certificates';
-import { ticketsAPI } from '@/lib/api/tickets';
-import { Award, Download, Calendar, MapPin, FileCheck, AlertCircle, Plus } from 'lucide-react';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import toast from 'react-hot-toast';
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import Navbar from "@/components/layout/Navbar";
+import Loading from "@/components/ui/Loading";
+import { certificatesAPI } from "@/lib/api/certificates";
+import { ticketsAPI } from "@/lib/api/tickets";
+import {
+  Award,
+  Download,
+  Calendar,
+  MapPin,
+  FileCheck,
+  AlertCircle,
+  Plus,
+} from "lucide-react";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import toast from "react-hot-toast";
 
 export default function CertificatesPage() {
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -22,7 +30,7 @@ export default function CertificatesPage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push('/auth/login');
+      router.push("/auth/login");
     }
   }, [isAuthenticated, authLoading, router]);
 
@@ -34,49 +42,50 @@ export default function CertificatesPage() {
 
   const loadData = async () => {
     try {
-      console.log('🔄 Chargement des données certificats...');
-      
+      console.log("🔄 Chargement des données certificats...");
+
       // 1. Charger les certificats existants
-      const { certificates: myCerts } = await certificatesAPI.getMyCertificates();
-      console.log('📜 Certificats existants:', myCerts.length);
+      const { certificates: myCerts } =
+        await certificatesAPI.getMyCertificates();
+      console.log("📜 Certificats existants:", myCerts.length);
       setCertificates(myCerts);
 
       // 2. Charger TOUS les tickets
       const { tickets } = await ticketsAPI.getMyTickets();
-      console.log('🎫 Tous mes tickets:', tickets.length);
-      
+      console.log("🎫 Tous mes tickets:", tickets.length);
+
       // 3. Filtrer : tickets avec check-in UNIQUEMENT
       const checkedInTickets = tickets.filter((t: any) => {
         console.log(`Ticket ${t.ticketNumber}:`, {
           eventTitle: t.event?.title,
           checkedIn: t.checkedIn,
-          eventId: t.eventId
+          eventId: t.eventId,
         });
         return t.checkedIn === true;
       });
-      
-      console.log('✅ Tickets check-in:', checkedInTickets.length);
-      
+
+      console.log(" Tickets check-in:", checkedInTickets.length);
+
       // 4. Exclure ceux qui ont déjà un certificat
       const certificateEventIds = myCerts.map((c: any) => c.eventId);
-      console.log('📋 Event IDs avec certificat:', certificateEventIds);
-      
+      console.log("📋 Event IDs avec certificat:", certificateEventIds);
+
       const eligible = checkedInTickets
         .filter((t: any) => !certificateEventIds.includes(t.eventId))
         .map((t: any) => ({
           id: t.eventId,
           ...t.event,
           ticketId: t.id,
-          ticketNumber: t.ticketNumber
+          ticketNumber: t.ticketNumber,
         }));
-      
-      console.log('🎯 Événements éligibles:', eligible.length);
-      eligible.forEach((e: any) => console.log('  -', e.title));
-      
+
+      console.log("🎯 Événements éligibles:", eligible.length);
+      eligible.forEach((e: any) => console.log("  -", e.title));
+
       setEligibleEvents(eligible);
     } catch (error) {
-      console.error('❌ Erreur chargement:', error);
-      toast.error('Erreur lors du chargement');
+      console.error(" Erreur chargement:", error);
+      toast.error("Erreur lors du chargement");
     } finally {
       setLoading(false);
     }
@@ -85,13 +94,14 @@ export default function CertificatesPage() {
   const handleGenerate = async (eventId: string) => {
     setGenerating(eventId);
     try {
-      console.log('🔄 Génération certificat pour événement:', eventId);
+      console.log("🔄 Génération certificat pour événement:", eventId);
       await certificatesAPI.generate(eventId);
-      toast.success('Certificat généré avec succès ! 🎉');
+      toast.success("Certificat généré avec succès ! 🎉");
       await loadData(); // Recharger
     } catch (error: any) {
-      console.error('❌ Erreur génération:', error);
-      const message = error.response?.data?.message || 'Erreur lors de la génération';
+      console.error(" Erreur génération:", error);
+      const message =
+        error.response?.data?.message || "Erreur lors de la génération";
       toast.error(message);
     } finally {
       setGenerating(null);
@@ -100,19 +110,20 @@ export default function CertificatesPage() {
 
   const handleDownload = (certificate: any) => {
     const url = `${process.env.NEXT_PUBLIC_API_URL}${certificate.pdfUrl}`;
-    console.log('📥 Téléchargement:', url);
-    window.open(url, '_blank');
+    console.log("📥 Téléchargement:", url);
+    window.open(url, "_blank");
   };
 
   if (authLoading || loading) return <Loading />;
   if (!isAuthenticated) return null;
 
-  const hasNoCertificatesAndNoEligible = certificates.length === 0 && eligibleEvents.length === 0;
+  const hasNoCertificatesAndNoEligible =
+    certificates.length === 0 && eligibleEvents.length === 0;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-secondary-50/50">
       <Navbar />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-secondary-900 flex items-center">
@@ -129,7 +140,9 @@ export default function CertificatesPage() {
           <div className="flex items-start">
             <AlertCircle className="h-5 w-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
             <div className="text-sm text-blue-800">
-              <p className="font-medium mb-1">💡 Comment obtenir un certificat ?</p>
+              <p className="font-medium mb-1">
+                  Comment obtenir un certificat ?
+              </p>
               <ul className="list-disc list-inside space-y-1 text-blue-700">
                 <li>Inscrivez-vous à un événement</li>
                 <li>Participez et faites valider votre présence (check-in)</li>
@@ -142,7 +155,7 @@ export default function CertificatesPage() {
         {/* Debug Info (Temporaire) */}
         <div className="card mb-6 bg-yellow-50 border-yellow-200">
           <div className="text-sm">
-            <p className="font-bold mb-2">🔍 Debug Info:</p>
+            <p className="font-bold mb-2">Info:</p>
             <ul className="space-y-1 text-yellow-800">
               <li>✓ Certificats générés: {certificates.length}</li>
               <li>✓ Événements éligibles: {eligibleEvents.length}</li>
@@ -159,14 +172,15 @@ export default function CertificatesPage() {
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {eligibleEvents.map((event) => (
-                <div key={event.id} className="card bg-green-50 border-2 border-green-200">
+                <div
+                  key={event.id}
+                  className="card bg-green-50 border-2 border-green-200"
+                >
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
                       <Award className="h-8 w-8 text-white" />
                     </div>
-                    <span className="badge badge-success">
-                      ✓ Présent
-                    </span>
+                    <span className="badge badge-success">✓ Présent</span>
                   </div>
 
                   <h3 className="text-lg font-bold text-secondary-900 mb-3">
@@ -176,7 +190,9 @@ export default function CertificatesPage() {
                   <div className="space-y-2 text-sm text-secondary-600 mb-4">
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 mr-2 text-green-500" />
-                      {format(new Date(event.startDate), 'dd MMMM yyyy', { locale: fr })}
+                      {format(new Date(event.startDate), "dd MMMM yyyy", {
+                        locale: fr,
+                      })}
                     </div>
                     <div className="flex items-center">
                       <MapPin className="h-4 w-4 mr-2 text-green-500" />
@@ -237,7 +253,11 @@ export default function CertificatesPage() {
                   <div className="space-y-2 text-sm text-secondary-600 mb-4">
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 mr-2 text-primary-500" />
-                      {format(new Date(certificate.event?.startDate), 'dd MMMM yyyy', { locale: fr })}
+                      {format(
+                        new Date(certificate.event?.startDate),
+                        "dd MMMM yyyy",
+                        { locale: fr },
+                      )}
                     </div>
                     <div className="flex items-center">
                       <MapPin className="h-4 w-4 mr-2 text-primary-500" />
@@ -248,7 +268,14 @@ export default function CertificatesPage() {
                   <div className="border-t border-secondary-200 pt-4 mt-4">
                     <div className="flex justify-between items-center text-xs text-secondary-500 mb-3">
                       <div>N° {certificate.certificateNumber}</div>
-                      <div>Émis le {format(new Date(certificate.issuedDate), 'dd/MM/yyyy', { locale: fr })}</div>
+                      <div>
+                        Émis le{" "}
+                        {format(
+                          new Date(certificate.issuedDate),
+                          "dd/MM/yyyy",
+                          { locale: fr },
+                        )}
+                      </div>
                     </div>
 
                     <button
@@ -273,10 +300,11 @@ export default function CertificatesPage() {
               Aucun certificat disponible
             </h3>
             <p className="text-secondary-600 mb-6">
-              Participez à des événements et faites valider votre présence pour obtenir des certificats
+              Participez à des événements et faites valider votre présence pour
+              obtenir des certificats
             </p>
             <button
-              onClick={() => router.push('/events')}
+              onClick={() => router.push("/events")}
               className="btn-primary"
             >
               Voir les événements

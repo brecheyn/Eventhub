@@ -111,7 +111,7 @@ export default function DashboardPage() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-secondary-900">
-            Bienvenue, {user?.name} ! 👋
+            Bienvenue, {user?.name} ! 
           </h1>
           <p className="mt-2 text-secondary-600">
             Voici un aperçu de votre activité

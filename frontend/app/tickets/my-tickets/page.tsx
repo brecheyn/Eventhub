@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import Navbar from '@/components/layout/Navbar';
-import Loading from '@/components/ui/Loading';
-import { ticketsAPI } from '@/lib/api/tickets';
-import { Ticket, Calendar, MapPin, QrCode, X } from 'lucide-react';
-import { format } from 'date-fns';
-import { fr } from 'date-fns/locale';
-import toast from 'react-hot-toast';
+import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import Navbar from "@/components/layout/Navbar";
+import Loading from "@/components/ui/Loading";
+import { ticketsAPI } from "@/lib/api/tickets";
+import { Ticket, Calendar, MapPin, QrCode, X } from "lucide-react";
+import { format } from "date-fns";
+import { fr } from "date-fns/locale";
+import toast from "react-hot-toast";
 
 export default function MyTicketsPage() {
   const { isAuthenticated, loading: authLoading } = useAuth();
@@ -20,7 +20,7 @@ export default function MyTicketsPage() {
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
-      router.push('/auth/login');
+      router.push("/auth/login");
     }
   }, [isAuthenticated, authLoading, router]);
 
@@ -32,27 +32,27 @@ export default function MyTicketsPage() {
 
   const loadTickets = async () => {
     try {
-      console.log('📡 Appel API tickets...');
+      console.log("📡 Appel API tickets...");
       const { tickets: myTickets } = await ticketsAPI.getMyTickets();
-      console.log('✅ Tickets reçus:', myTickets);
+      console.log(" Tickets reçus:", myTickets);
       setTickets(myTickets);
     } catch (error: any) {
-      console.error('❌ Erreur tickets:', error);
-      toast.error('Erreur lors du chargement');
+      console.error(" Erreur tickets:", error);
+      toast.error("Erreur lors du chargement");
     } finally {
       setLoading(false);
     }
   };
 
   const handleCancel = async (ticketId: string) => {
-    if (!confirm('Annuler ce ticket ?')) return;
+    if (!confirm("Annuler ce ticket ?")) return;
 
     try {
       await ticketsAPI.cancel(ticketId);
-      toast.success('Ticket annulé');
+      toast.success("Ticket annulé");
       loadTickets();
     } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Erreur');
+      toast.error(error.response?.data?.message || "Erreur");
     }
   };
 
@@ -62,7 +62,7 @@ export default function MyTicketsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-secondary-50/50">
       <Navbar />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-secondary-900 flex items-center">
@@ -84,7 +84,7 @@ export default function MyTicketsPage() {
               Inscrivez-vous à un événement pour obtenir votre premier ticket
             </p>
             <button
-              onClick={() => router.push('/events')}
+              onClick={() => router.push("/events")}
               className="btn-primary"
             >
               Voir les événements
@@ -93,16 +93,23 @@ export default function MyTicketsPage() {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {tickets.map((ticket) => (
-              <div key={ticket.id} className="card hover:shadow-lg transition-shadow">
+              <div
+                key={ticket.id}
+                className="card hover:shadow-lg transition-shadow"
+              >
                 <div className="flex justify-between items-start mb-4">
-                  <span className={`badge ${
-                    ticket.checkedIn ? 'badge-success' :
-                    ticket.status === 'confirmed' ? 'badge-info' :
-                    'badge-danger'
-                  }`}>
-                    {ticket.checkedIn ? 'Présent' : ticket.status}
+                  <span
+                    className={`badge ${
+                      ticket.checkedIn
+                        ? "badge-success"
+                        : ticket.status === "confirmed"
+                          ? "badge-info"
+                          : "badge-danger"
+                    }`}
+                  >
+                    {ticket.checkedIn ? "Présent" : ticket.status}
                   </span>
-                  {!ticket.checkedIn && ticket.status === 'confirmed' && (
+                  {!ticket.checkedIn && ticket.status === "confirmed" && (
                     <button
                       onClick={() => handleCancel(ticket.id)}
                       className="text-red-600 hover:text-red-700 text-sm"
@@ -119,7 +126,11 @@ export default function MyTicketsPage() {
                 <div className="space-y-2 text-sm text-secondary-600 mb-4">
                   <div className="flex items-center">
                     <Calendar className="h-4 w-4 mr-2 text-primary-500" />
-                    {format(new Date(ticket.event?.startDate), 'dd MMMM yyyy à HH:mm', { locale: fr })}
+                    {format(
+                      new Date(ticket.event?.startDate),
+                      "dd MMMM yyyy à HH:mm",
+                      { locale: fr },
+                    )}
                   </div>
                   <div className="flex items-center">
                     <MapPin className="h-4 w-4 mr-2 text-primary-500" />
@@ -130,7 +141,9 @@ export default function MyTicketsPage() {
                 <div className="border-t border-secondary-200 pt-4 mt-4">
                   <div className="flex justify-between items-center">
                     <div>
-                      <div className="text-xs text-secondary-500">N° Ticket</div>
+                      <div className="text-xs text-secondary-500">
+                        N° Ticket
+                      </div>
                       <div className="font-mono text-sm font-bold text-secondary-900">
                         {ticket.ticketNumber}
                       </div>
@@ -152,8 +165,14 @@ export default function MyTicketsPage() {
 
       {/* QR Code Modal */}
       {selectedTicket && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={() => setSelectedTicket(null)}>
-          <div className="bg-white rounded-2xl p-8 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedTicket(null)}
+        >
+          <div
+            className="bg-white rounded-2xl p-8 max-w-md w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold text-secondary-900">QR Code</h3>
               <button
@@ -166,7 +185,11 @@ export default function MyTicketsPage() {
 
             <div className="bg-white p-6 border-4 border-secondary-100 rounded-xl mb-6">
               {selectedTicket.qrCode && (
-                <img src={selectedTicket.qrCode} alt="QR Code" className="w-full" />
+                <img
+                  src={selectedTicket.qrCode}
+                  alt="QR Code"
+                  className="w-full"
+                />
               )}
             </div>
 

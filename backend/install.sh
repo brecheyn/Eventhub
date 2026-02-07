@@ -4,7 +4,7 @@ echo "Installing dependencies..."
 npm install
 
 echo ""
-echo "✅ Installation complete!"
+echo " Installation complete!"
 echo ""
 echo "Next steps:"
 echo "1. Create PostgreSQL database: event_conference_db"

@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { Mail, Lock, Eye, EyeOff, Calendar, LogIn } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { useState, useEffect } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Mail, Lock, Eye, EyeOff, Calendar, LogIn } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login, isAuthenticated, loading: authLoading } = useAuth();
-  
+
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -21,40 +21,39 @@ export default function LoginPage() {
   // Rediriger si déjà connecté
   useEffect(() => {
     if (!authLoading && isAuthenticated) {
-      router.push('/dashboard');
+      router.push("/dashboard");
     }
   }, [isAuthenticated, authLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validation basique
     if (!formData.email || !formData.password) {
-      toast.error('Veuillez remplir tous les champs');
+      toast.error("Veuillez remplir tous les champs");
       return;
     }
 
     if (formData.password.length < 6) {
-      toast.error('Le mot de passe doit contenir au moins 6 caractères');
+      toast.error("Le mot de passe doit contenir au moins 6 caractères");
       return;
     }
 
     setLoading(true);
 
     try {
-      console.log('🔐 Tentative de connexion:', formData.email);
-      
+      console.log("🔐 Tentative de connexion:", formData.email);
+
       await login(formData.email, formData.password);
-      
-      toast.success('Connexion réussie ! 🎉');
-      router.push('/dashboard');
+
+      toast.success("Connexion réussie ! 🎉");
+      router.push("/dashboard");
     } catch (error: any) {
-      console.error('❌ Erreur login:', error);
-      
-      const errorMessage = error.response?.data?.message 
-        || error.message 
-        || 'Erreur de connexion';
-      
+      console.error(" Erreur login:", error);
+
+      const errorMessage =
+        error.response?.data?.message || error.message || "Erreur de connexion";
+
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -109,7 +108,10 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-secondary-700 mb-2">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-secondary-700 mb-2"
+              >
                 Email
               </label>
               <div className="relative">
@@ -130,7 +132,10 @@ export default function LoginPage() {
 
             {/* Mot de passe */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-secondary-700 mb-2">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-secondary-700 mb-2"
+              >
                 Mot de passe
               </label>
               <div className="relative">
@@ -138,7 +143,7 @@ export default function LoginPage() {
                 <input
                   id="password"
                   name="password"
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   autoComplete="current-password"
                   required
                   value={formData.password}
@@ -151,7 +156,11 @@ export default function LoginPage() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-secondary-400 hover:text-secondary-600 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -179,8 +188,11 @@ export default function LoginPage() {
           {/* Lien d'inscription */}
           <div className="mt-6 text-center">
             <p className="text-sm text-secondary-600">
-              Pas encore de compte ?{' '}
-              <Link href="/auth/register" className="font-medium text-primary-600 hover:text-primary-500 transition-colors">
+              Pas encore de compte ?{" "}
+              <Link
+                href="/auth/register"
+                className="font-medium text-primary-600 hover:text-primary-500 transition-colors"
+              >
                 Créer un compte
               </Link>
             </p>

@@ -79,7 +79,7 @@ export default function EventDetailsPage() {
     setRegistering(true);
     try {
       await ticketsAPI.create(eventId);
-      toast.success('Inscription réussie ! 🎉');
+      toast.success('Inscription réussie ! ');
       setHasTicket(true);
       loadEventDetails();
     } catch (error: any) {

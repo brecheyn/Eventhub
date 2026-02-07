@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const { User } = require('../models');
 const { generateToken } = require('../utils/tokenGenerator');
 const { validationResult } = require('express-validator');
@@ -87,7 +88,7 @@ const updateProfile = async (req, res) => {
     const { username, email, bio, avatar } = req.body;
     const userId = req.user.id;
 
-    console.log('📝 Mise à jour du profil pour:', userId);
+    console.log(' Mise à jour du profil pour:', userId);
 
     const user = await User.findByPk(userId);
     if (!user) {
@@ -119,7 +120,7 @@ const updateProfile = async (req, res) => {
 
     await user.update(updateData);
 
-    console.log('✅ Profil mis à jour');
+    console.log('Profil mis à jour');
 
     // Retourner l'utilisateur mis à jour (sans le mot de passe)
     const { password, ...userWithoutPassword } = user.toJSON();
@@ -129,7 +130,7 @@ const updateProfile = async (req, res) => {
       user: userWithoutPassword
     });
   } catch (error) {
-    console.error('❌ Erreur updateProfile:', error);
+    console.error(' Erreur updateProfile:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
@@ -138,7 +139,7 @@ const changePassword = async (req, res) => {
     const { currentPassword, newPassword } = req.body;
     const userId = req.user.id;
 
-    console.log('🔒 Changement de mot de passe pour:', userId);
+    console.log(' Changement de mot de passe pour:', userId);
 
     const user = await User.findByPk(userId);
     if (!user) {
@@ -148,7 +149,7 @@ const changePassword = async (req, res) => {
     // Vérifier le mot de passe actuel
     const isMatch = await bcrypt.compare(currentPassword, user.password);
     if (!isMatch) {
-      console.log('❌ Mot de passe actuel incorrect');
+      console.log('Mot de passe actuel incorrect');
       return res.status(400).json({ message: 'Current password is incorrect' });
     }
 
@@ -156,11 +157,11 @@ const changePassword = async (req, res) => {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await user.update({ password: hashedPassword });
 
-    console.log('✅ Mot de passe changé avec succès');
+    console.log(' Mot de passe changé avec succès');
 
     res.json({ message: 'Password changed successfully' });
   } catch (error) {
-    console.error('❌ Erreur changePassword:', error);
+    console.error(' Erreur changePassword:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
@@ -169,7 +170,7 @@ const deleteAccount = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    console.log('🗑️  Suppression du compte:', userId);
+    console.log('  Suppression du compte:', userId);
 
     const user = await User.findByPk(userId);
     if (!user) {
@@ -180,11 +181,11 @@ const deleteAccount = async (req, res) => {
     // (Les relations avec onDelete: 'CASCADE' feront le travail)
     await user.destroy();
 
-    console.log('✅ Compte supprimé');
+    console.log('Compte supprimé');
 
     res.json({ message: 'Account deleted successfully' });
   } catch (error) {
-    console.error('❌ Erreur deleteAccount:', error);
+    console.error(' Erreur deleteAccount:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 };
