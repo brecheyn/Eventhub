@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../certificates/certificates_page.dart';
 import '../events/events_page.dart';
-import '../home/home.dart';
 import '../profile/profile_page.dart';
 import '../tickets/tickets_page.dart';
 
@@ -19,7 +18,6 @@ class _HomeShellState extends State<HomeShell> {
   late int _index;
 
   static const _pages = [
-    HomePage(),
     EventsPage(),
     TicketsPage(),
     CertificatesPage(),
@@ -40,12 +38,15 @@ class _HomeShellState extends State<HomeShell> {
         selectedIndex: _index,
         onDestinationSelected: (value) => setState(() => _index = value),
         destinations: const [
-          NavigationDestination(icon: Icon(Icons.home), label: 'Accueil'),
           NavigationDestination(icon: Icon(Icons.event), label: 'Événements'),
           NavigationDestination(
-              icon: Icon(Icons.confirmation_number), label: 'Tickets'),
+            icon: Icon(Icons.confirmation_number),
+            label: 'Tickets',
+          ),
           NavigationDestination(
-              icon: Icon(Icons.workspace_premium), label: 'Certificats'),
+            icon: Icon(Icons.workspace_premium),
+            label: 'Certificats',
+          ),
           NavigationDestination(icon: Icon(Icons.person), label: 'Profil'),
         ],
       ),

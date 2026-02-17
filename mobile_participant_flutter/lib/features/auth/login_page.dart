@@ -42,7 +42,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     if (ok && mounted) {
       Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => const HomeShell(initialIndex: 1)),
+        MaterialPageRoute(builder: (_) => const HomeShell(initialIndex: 0)),
         (route) => false,
       );
     }
@@ -55,7 +55,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(gradient: AppColors.heroGradient),
+        color: AppColors.orange,
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
