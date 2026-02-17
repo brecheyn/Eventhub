@@ -4,7 +4,11 @@ const path = require('path');
 
 const generateQRCode = async (data, filename) => {
   try {
-    const qrPath = path.join(__dirname, '../../uploads/qrcodes', filename);
+    const qrDir = path.join(__dirname, '../../uploads/qrcodes');
+    const qrPath = path.join(qrDir, filename);
+    if (!fs.existsSync(qrDir)) {
+      fs.mkdirSync(qrDir, { recursive: true });
+    }
     
     // Générer le QR code
     await QRCode.toFile(qrPath, data, {

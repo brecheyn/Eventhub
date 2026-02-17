@@ -1,11 +1,11 @@
-const PDFDocument = require('pdfkit');
+﻿const PDFDocument = require('pdfkit');
 const fs = require('fs');
 const path = require('path');
 
 const generateCertificate = async (participant, event, certificateNumber) => {
   return new Promise((resolve, reject) => {
     try {
-      // Créer le dossier si nécessaire
+      // CrÃ©er le dossier si nÃ©cessaire
       const dir = path.join(__dirname, '../../uploads/certificates');
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
@@ -13,7 +13,7 @@ const generateCertificate = async (participant, event, certificateNumber) => {
 
       const filePath = path.join(dir, `${certificateNumber}.pdf`);
       
-      // Créer le document PDF en paysage A4
+      // CrÃ©er le document PDF en paysage A4
       const doc = new PDFDocument({ 
         layout: 'landscape',
         size: 'A4',
@@ -34,25 +34,25 @@ const generateCertificate = async (participant, event, certificateNumber) => {
       const pageHeight = doc.page.height;
       const centerX = pageWidth / 2;
 
-      // ═══════════════════════════════════════════════════════════
-      // BORDURES DÉCORATIVES
-      // ═══════════════════════════════════════════════════════════
+      // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+      // BORDURES DÃ‰CORATIVES
+      // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
       
-      // Bordure extérieure orange épaisse
+      // Bordure extÃ©rieure orange Ã©paisse
       doc.roundedRect(30, 30, pageWidth - 60, pageHeight - 60, 10)
          .lineWidth(4)
          .strokeColor('#f97316')
          .stroke();
 
-      // Bordure intérieure fine orange clair
+      // Bordure intÃ©rieure fine orange clair
       doc.roundedRect(45, 45, pageWidth - 90, pageHeight - 90, 8)
          .lineWidth(2)
          .strokeColor('#fed7aa')
          .stroke();
 
-      // ═══════════════════════════════════════════════════════════
-      // EN-TÊTE
-      // ═══════════════════════════════════════════════════════════
+      // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+      // EN-TÃŠTE
+      // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
       
       let y = 80;
       
@@ -67,7 +67,7 @@ const generateCertificate = async (participant, event, certificateNumber) => {
 
       y += 50;
 
-      // Ligne décorative sous le titre
+      // Ligne dÃ©corative sous le titre
       const lineMargin = 180;
       doc.moveTo(lineMargin, y)
          .lineTo(pageWidth - lineMargin, y)
@@ -77,9 +77,9 @@ const generateCertificate = async (participant, event, certificateNumber) => {
 
       y += 30;
 
-      // ═══════════════════════════════════════════════════════════
+      // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
       // CORPS DU CERTIFICAT
-      // ═══════════════════════════════════════════════════════════
+      // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
       
       // Texte "Ce certificat atteste que"
       doc.fontSize(14)
@@ -114,7 +114,7 @@ const generateCertificate = async (participant, event, certificateNumber) => {
 
       y += 35;
 
-      // TITRE DE L'ÉVÉNEMENT
+      // TITRE DE L'Ã‰VÃ‰NEMENT
       doc.fontSize(22)
          .font('Helvetica-Bold')
          .fillColor('#1f2937')
@@ -147,9 +147,9 @@ const generateCertificate = async (participant, event, certificateNumber) => {
         align: 'center'
       });
 
-      // ═══════════════════════════════════════════════════════════
+      // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
       // PIED DU CERTIFICAT
-      // ═══════════════════════════════════════════════════════════
+      // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
       
       const footerY = pageHeight - 140;
 
@@ -180,7 +180,7 @@ const generateCertificate = async (participant, event, certificateNumber) => {
            });
       }
 
-      // NUMÉRO DE CERTIFICAT (centre bas)
+      // NUMÃ‰RO DE CERTIFICAT (centre bas)
       doc.fontSize(9)
          .font('Helvetica')
          .fillColor('#9ca3af')
@@ -220,9 +220,9 @@ const generateCertificate = async (participant, event, certificateNumber) => {
            align: 'right'
          });
 
-      // ═══════════════════════════════════════════════════════════
+      // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
       // FINALISER
-      // ═══════════════════════════════════════════════════════════
+      // â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
       
       doc.end();
 
